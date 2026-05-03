@@ -1,8 +1,12 @@
-#TODO: Get user imput on how many manufactured items are available and how many items are needed to fill a box. Then calculate how many boxes can be filled and how many items are left over.   
+import math
 
 manufacturedItems = int(input("How mant itesm do you have? "))
 boxCapacity = int(input("How many items fit in a box? "))
 
-neededBoxes = manufacturedItems / boxCapacity
+neededBoxes = math.ceil(manufacturedItems / boxCapacity)
 
-print(f"You will need need {neededBoxes} boxes but will have a some left over.")
+print(f"For {manufacturedItems} items, packing {boxCapacity} items in each box, you will need {neededBoxes} boxes.")
+
+# The math.ceil() function required a call to "import math" for the function to work
+# The function tell an equasion or value to round up to the neirest 1. 
+# If not included, the program would leave out remainders of a number. 
