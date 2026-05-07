@@ -4,7 +4,7 @@ dayOfWeek = 0
 discount = 1
 salesTax = .06
 # dayOfWeekNum = datetime.today().weekday()
-dayOfWeekNum = 2
+dayOfWeekNum = 5
 
 weekDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 print(f"The day is {weekDay[dayOfWeekNum]}.")
