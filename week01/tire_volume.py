@@ -1,17 +1,18 @@
 import math as m
-import datetime from datetime
+from datetime import datetime as dt
 
-dt = datetime
+todaysDate = dt.now()
+# {todaysDate:%Y-%m-%d}
 
-tireWidth = int(input("Enter the width of the tire in mm (ex 205): "))
-aspectRatio = int(input("nter the aspect ratio of the tire (ex 60): "))
-tireDiameter = int(input("Enter the diameter of the wheel in inches (ex 15): "))
+#tireWidth = int(input("Enter the width of the tire in mm (ex 205): "))
+#aspectRatio = int(input("nter the aspect ratio of the tire (ex 60): "))
+#tireDiameter = int(input("Enter the diameter of the wheel in inches (ex 15): "))
 
-tireVolumeL = m.pi * (tireWidth**2) * aspectRatio * (tireWidth * aspectRatio + 2540 * tireDiameter) / 10_000_000_000
+#tireVolumeL = m.pi * (tireWidth**2) * aspectRatio * (tireWidth * aspectRatio + 2540 * tireDiameter) / 10_000_000_000
 
-print(f"The approximate volume is {tireVolumeL:.2f} liters")
+#print(f"The approximate volume is {tireVolumeL:.2f} liters")
 
-
+print(f"{dt.now():%Y-%m-%d}")
 
 
 
