@@ -3,7 +3,11 @@ Author: Michael Wiseman
 Assignment: Password strength checker
 Date: 5/13/26
 """
-import string # will be used in my enhancement to the code in lines 30-36 to simplify character lists
+import string # used string in my enhancement in lines 30-36 to simplify character lists instead of the lined below
+              #LOWER=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+              #UPPER=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+              #DIGITS=["0","1","2","3","4","5","6","7","8","9"]
+              #SPECIAL=["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "]", "{", "}", "|", ";", ":", "'", "\"", ",", ".", "<", ">", "?", "/", "\\","`", "~"]
 
 def word_in_file(word, filename, case_sensative):
     with open(filename, "r", encoding="utf-8") as file:
