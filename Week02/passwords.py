@@ -1,7 +1,7 @@
 """
 Author: Michael Wiseman
 Assignment: Password strength checker
-Date: 1/14/26
+Date: 5/13/26
 """
 import string # will be used in my enhancement to the code in lines 30-36 to simplify character lists
 
@@ -39,8 +39,8 @@ def word_complexity(word):
 
 # converted password to just 'word'
 def password_strength(word, min_length=10, strong_length=16):
-    word_list_file = "CSE111/W02/wordlist.txt"
-    top_password_file = "CSE111/W02/toppasswords.txt"
+    word_list_file = "/Users/michaelwiseman/Documents/School/cse111/Week02/wordlist.txt"
+    top_password_file = "/Users/michaelwiseman/Documents/School/cse111/Week02/wordlist.txt"
     # Both call the same function but pass a differant file name through so that it checks both files in one function
     if word_in_file(word, word_list_file, True):
         print("This password can be found in a disctionary.")
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
 
 """
-Future me,  This project tought me about dfferant ways to use nested functions, 
+Future me,  This project tought me about differant ways to use nested functions, 
 using making a variable the value of a return of a function. It also solidified 
 my understanding of naming variable that pass through functions. 
 
