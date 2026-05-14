@@ -8,13 +8,53 @@
 
 USE: open(filename, "r",encoding="utf-8")
 """
+import os
+cwd = os.getcwd()
+#Define Global Variables (Like file location)
+#WORDFILE = "./Week2/wordlist.txt"
+# "~/Documents/School/cse111/Week2/wordlist.txt"
+WORDFILE = "/Users/michaelwiseman/Documents/School/cse111/Week02/wordlist.txt"
 
 
+def word_in_file(WORDFILE, answer):
+    #with open(WORDFILE, "r",encoding="utf-8") as file:
+        #for line in file:
+            #words = line.split()
+            #for word in words:
+                #if word == answer:
+                    #break
+                #else:
+                    #return False
+            #return True
+    pass
+    
+def word_has_character():
+    #LOWER=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+    #UPPER=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    #DIGITS=["0","1","2","3","4","5","6","7","8","9"]
+    #SPECIAL=["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "]", "{", "}", "|", ";", ":", "'", "\"", ",", ".", "<", ">", "?", "/", "\\","`", "~"]
+    pass
+def word_complexity():
+    pass
+def password_strength(answer):
+    word_in_file(WORDFILE,answer)
+    word_has_character()
+    word_complexity()
 
+    print(answer)
 
 def main():
-    pass
-
+    
+    answer = ""
+    # Note that I could have used .lower() to make any answer q or Q.
+    while answer != "q" or answer != "Q":
+        answer = input("Provide your password: (enter Q to Quit) ")
+        if answer == "q" or answer == "Q":
+            print("User has quit.")
+            return
+        print("User provided a valid passoword")
+        #word_in_file(WORDFILE, answer)
+        password_strength(answer)
 
 if __name__ == "__main__":
     main()
