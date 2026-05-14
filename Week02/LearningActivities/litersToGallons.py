@@ -12,11 +12,6 @@ def main():
     firstReading = float(input("Enter the first odometer reading (miles):"))
     secondReading = float(input("Enter the second odometer reading (miles)"))
     galUsed = float(input("Enter the amount of fuel used (gallons)"))
-
     miles_per_gallon(firstReading, secondReading, galUsed)
 
 main()
-
-
-
-#mpg = end − start/gallons
