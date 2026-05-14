@@ -12,11 +12,11 @@ import string # used string in my enhancement to simplify character lists instea
 # Enhancement: password_strength now returns both a strength score and a message
 # so that main() can store a full history of tested passwords and display it on quit.
 
-def word_in_file(word, filename, case_sensative=False):
+def word_in_file(word,filename,case_sensitive=False):
     with open(filename, "r", encoding="utf-8") as file:
         for line in file:
             line = line.strip()
-            if case_sensative:
+            if case_sensitive:
                 if line == word:
                     return True
             else:
@@ -24,7 +24,7 @@ def word_in_file(word, filename, case_sensative=False):
                     return True
     return False
 
-def word_has_character(word, character_list):
+def word_has_character(word,character_list):
     for character in word:
         if character in character_list:
             return True
