@@ -19,11 +19,11 @@ print(f"The approximate volume is {volume:.2f} liters")
 
 current_date = dt.now()
 
-newsletter_tires = input("Do you want to subscribe for a newsletter? (yes/no): ").lower()
+newsletter = input("Do you want to subscribe for a newsletter? (yes/no): ").lower()
 user_email = ""
 
 # If the user says yes, ask for their email
-if newsletter_tires == "yes":
+if newsletter == "yes":
     user_email = input("Please enter your email: ")
 
 with open("volumes.txt", "at") as file:
