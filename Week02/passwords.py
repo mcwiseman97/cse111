@@ -3,11 +3,11 @@ Author: Michael Wiseman
 Assignment: Password strength checker
 Date: 5/13/26
 """
-import string # used string in my enhancement to simplify character lists instead of the ones below
-              #LOWER=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-              #UPPER=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-              #DIGITS=["0","1","2","3","4","5","6","7","8","9"]
-              #SPECIAL=["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "]", "{", "}", "|", ";", ":", "'", "\"", ",", ".", "<", ">", "?", "/", "\\","`", "~"]
+
+LOWER=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+UPPER=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+DIGITS=["0","1","2","3","4","5","6","7","8","9"]
+SPECIAL=["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "]", "{", "}", "|", ";", ":", "'", "\"", ",", ".", "<", ">", "?", "/", "\\","`", "~"]
 
 # Enhancement: password_strength now returns both a strength score and a message
 # so that main() can store a full history of tested passwords and display it on quit.
@@ -31,39 +31,40 @@ def word_has_character(word,character_list):
     return False
 
 def word_complexity(word):
-    # string.ascii_uppercase, string.ascii_lowercase, string.digits, and string.punctuation
-    # are premade character lists built into Python's string module (IMPORT STRING TO USE)
     complexity = 0
-    if word_has_character(word, string.ascii_uppercase):
+    
+    # Check against manual lists instead of string module constants
+    if word_has_character(word, UPPER):
         complexity += 1
-    if word_has_character(word, string.ascii_lowercase):
+    if word_has_character(word, LOWER):
         complexity += 1
-    if word_has_character(word, string.digits):
+    if word_has_character(word, DIGITS):
         complexity += 1
-    if word_has_character(word, string.punctuation):
+    if word_has_character(word, SPECIAL):
         complexity += 1
+        
     return complexity
 
-def password_strength(word, min_length=10, strong_length=16):
-    word_list_file = "/Users/michaelwiseman/Documents/School/cse111/Week02/wordlist.txt"
-    top_password_file = "/Users/michaelwiseman/Documents/School/cse111/Week02/toppasswords.txt"
-    if word_in_file(word, word_list_file, False):
+def password_strength(password,min_length=10,strong_length=16):
+    word_list_file = "wordlist.txt"
+    top_password_file = "toppasswords.txt"
+    if word_in_file(password, word_list_file, False):
         message = "Password is a dictionary word and is not secure."
         print(message)
         return 0, message
-    if word_in_file(word, top_password_file, True):
+    if word_in_file(password, top_password_file, True):
         message = "Password is a commonly used password and is not secure."
         print(message)
         return 0, message
-    if len(word) < min_length:
+    if len(password) < min_length:
         message = "Password is too short and is not secure."
         print(message)
         return 1, message
-    if len(word) >= strong_length:
+    if len(password) >= strong_length:
         message = "Password is long, length trumps complexity this is a good password."
         print(message)
         return 5, message
-    complexity = word_complexity(word)
+    complexity = word_complexity(password)
     strength = 1 + complexity
     message = f"Password Complexity score: {complexity}"
     print(message)
