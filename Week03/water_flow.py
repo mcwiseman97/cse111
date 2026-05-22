@@ -1,5 +1,5 @@
 # --- Creative Addition: Added a visual representation of pressure concerns to the main function
-# Indicates if the pressure falls within the normal house pressure of 275kPa - 550kPa 
+# Indicates if the pressure falls within the normal house pressure of 275kPa - 550kPa per google
 # adds an emoji for visual representation.
 
 PVC_SCHED80_INNER_DIAMETER = 0.28687 # (meters)  11.294 inches
