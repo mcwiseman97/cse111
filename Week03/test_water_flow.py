@@ -3,7 +3,6 @@ import pytest
 
 from water_flow import water_column_height, pressure_gain_from_water_height, pressure_loss_from_pipe, pressure_loss_from_fittings, reynolds_number, pressure_loss_from_pipe_reduction
 
-
 def test_water_column_height():
     i = 0
     while i < 4:
@@ -61,9 +60,6 @@ def test_pressure_loss_from_pipe_reduction():
         assert pressure_loss_from_pipe_reduction(larger_diameter[i], fluid_velocity[i], reynolds_number[i], smaller_diameter[i]) == approx(answer[i], abs=0.001)
         i += 1
 
-
 # Call the main function that is part of pytest so that the
 # computer will execute the test functions in this file.
 pytest.main(["-v", "--tb=line", "-rN", __file__])
-
-
