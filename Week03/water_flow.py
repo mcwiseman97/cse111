@@ -1,3 +1,7 @@
+# --- Creative Addition: Added a visual representation of pressure concerns to the main function
+# Indicates if the pressure falls within the normal house pressure of 275kPa - 550kPa 
+# adds an emoji for visual representation.
+
 PVC_SCHED80_INNER_DIAMETER = 0.28687 # (meters)  11.294 inches
 PVC_SCHED80_FRICTION_FACTOR = 0.013  # (unitless)
 SUPPLY_VELOCITY = 1.65               # (meters / second)
@@ -33,6 +37,16 @@ def main():
     pressure += loss
     print()
     print(f"Pressure at house: {pressure:.1f} kilopascals\n")
+
+    print("Water Pressure Warnings")
+    if pressure < 0:
+        print("❌ CRITICALLY LOW!")
+    elif pressure < 200:
+        print("🚨 LOW PRESSURE!")
+    elif pressure <= 550:
+        print("✅ IDEAL PRESSURE.")
+    else:
+        print("‼️ HIGH PRESSURE!")
 
 def water_column_height(tower_height, tank_height):
     column_height = tower_height + 3 * tank_height / 4
