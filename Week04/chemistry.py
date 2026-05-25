@@ -11,11 +11,13 @@ def main():
 
     periodic_dict = make_periodic_table()
 
-    element_list = parse_formula()
+    element_list = parse_formula(chem_formula, periodic_dict)
 
     mol_mass = compute_molar_mass(element_list, periodic_dict)
 
-    print(f"The molar mass is: {mol_mass}")
+    print(f"The molar mass is: {mol_mass} grams/mole")
+    moles = sample_size / mol_mass
+    print(f"{moles:.5f} grams/mole")
 
     pass
 
