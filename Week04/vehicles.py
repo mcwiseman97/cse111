@@ -31,7 +31,7 @@ def main():
         color = car[COLOR_INDEX]
         
 
-        print(f"{manufacturer}, {model}, {color}")
+        print(f"{manufacturer} {model} {color}")
 
         # Print the manufacturer, model, and color of the vehicle.
         # Don't print the year, engine design, or displacement.
