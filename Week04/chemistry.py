@@ -1,3 +1,7 @@
+# Creative addition:
+# This program calculates and displays the mass percentage composition 
+# for each element present in the chemical formula.
+
 from formula import parse_formula
 # Indexes for inner lists in the periodic table
 MASS_INDEX = 1
@@ -17,7 +21,7 @@ def main():
 
     print(f"The molar mass is: {mol_mass} grams/mole")
     moles = sample_size / mol_mass
-    print(f"{moles:.5f} grams/mole")
+    print(f"{moles:.5f} moles")
 
     pass
 
@@ -119,12 +123,11 @@ def make_periodic_table():
         "Zn": ["Zinc", 65.38],
         "Zr": ["Zirconium", 91.224]
     }
-    # Nothing to pass in
-    # return Dictionary
     return periodic_table
 
 def compute_molar_mass(element_list, periodic_dict):
     total_mass = 0
+    element_masses = {}
 
     for list_item in element_list:
         symbol = list_item[SYMBOL_INDEX]
@@ -135,13 +138,22 @@ def compute_molar_mass(element_list, periodic_dict):
             return None
 
         atomic_mass = periodic_dict[symbol][MASS_INDEX]
-        total_mass += atomic_mass * quantity
+        
+        element_total_mass = atomic_mass * quantity
+        total_mass += element_total_mass
+        
+        if symbol in element_masses:
+            element_masses[symbol] += element_total_mass
+        else:
+            element_masses[symbol] = element_total_mass
+
+    print("\nMass Composition Breakdown:")
+    for symbol, mass in element_masses.items():
+        percentage = (mass / total_mass) * 100
+        print(f"  {symbol}: {percentage:.2f}%")
+    print("-" * 30)
 
     return total_mass
-    # Pass in symbol_quantity_list, periodic_table_dict
-    # return a float
-    return molar_mass
-
 
 if __name__ == "__main__":
     main()
