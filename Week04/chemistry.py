@@ -1,4 +1,8 @@
 from formula import parse_formula
+# Indexes for inner lists in the periodic table
+MASS_INDEX = 1
+SYMBOL_INDEX = 0
+QUANTITY_INDEX = 1
 
 def main():
     
@@ -117,8 +121,21 @@ def make_periodic_table():
     # return Dictionary
     return periodic_table
 
-def compute_molar_mass():
-    molar_mass = ""
+def compute_molar_mass(element_list, periodic_dict):
+    total_mass = 0
+
+    for list_item in element_list:
+        symbol = list_item[SYMBOL_INDEX]
+        quantity = list_item[QUANTITY_INDEX]
+
+        if symbol not in periodic_dict:
+            print(f"Element {symbol} not found in the periodic table.")
+            return None
+
+        atomic_mass = periodic_dict[symbol][MASS_INDEX]
+        total_mass += atomic_mass * quantity
+
+    return total_mass
     # Pass in symbol_quantity_list, periodic_table_dict
     # return a float
     return molar_mass
