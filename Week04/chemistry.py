@@ -1,8 +1,17 @@
 from formula import parse_formula
 
 def main():
+    
+    chem_formula = input("Pleae give a chemical formula: ")
+    sample_size = float(input("What is the sample size in grams: "))
+
     periodic_dict = make_periodic_table()
-    compute_molar_mass(symbol_list, periodic_dict)
+
+    element_list = parse_formula()
+
+    mol_mass = compute_molar_mass(element_list, periodic_dict)
+
+    print(f"The molar mass is: {mol_mass}")
 
     pass
 
@@ -109,10 +118,10 @@ def make_periodic_table():
     return periodic_table
 
 def compute_molar_mass():
-    
+    molar_mass = ""
     # Pass in symbol_quantity_list, periodic_table_dict
     # return a float
-    pass
+    return molar_mass
 
 
 if __name__ == "__main__":
