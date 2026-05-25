@@ -1,6 +1,6 @@
 # Creative addition:
-# This program calculates and displays the mass percentage composition 
-# for each element present in the chemical formula.
+# This program calculates and displays the percentage of each element
+# chemical formula.
 
 from formula import parse_formula
 # Indexes for inner lists in the periodic table
