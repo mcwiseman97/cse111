@@ -2,6 +2,8 @@ import os
 
 FILENAME = 'mind.md'
 
+# Function checks to see if the file exists, create it if its missings
+# Returns Boolean value true if and when the file is there
 def verify_file(filename):
     print("Checking file status...")
     print(os.listdir())
@@ -12,7 +14,9 @@ def verify_file(filename):
 
         with open(FILENAME, 'w') as file:
             file.write("Habits...")
+    print("Loading File...")
     return True
+
 
 def load_file(filename):
     pass
@@ -25,11 +29,11 @@ def display_dashboard(metrics_dict):
 
 
 def main():
+
     print("Welcome to Chronos! Lets work on your habits!")
     print(f"Your habits are stored in the {FILENAME} file.")
 
-    valid_file = verify_file(FILENAME)
-
+    verify_file(FILENAME)
     load_file('')
 
 
