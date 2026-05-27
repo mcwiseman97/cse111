@@ -19,6 +19,7 @@ def verify_file(filename):
 
 
 def load_file(filename):
+    print("File is loading")
     pass
 
 def save_file(filename, lines_list):
@@ -34,7 +35,7 @@ def main():
     print(f"Your habits are stored in the {FILENAME} file.")
 
     verify_file(FILENAME)
-    load_file('')
+    load_file(FILENAME)
 
-
-main()
+if __name__ == "__main__":
+    main()
