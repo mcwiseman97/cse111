@@ -20,7 +20,17 @@ def verify_file(filename):
 
 def load_file(filename):
     print("File is loading")
+    with open(filename, 'r', encoding='utf-8') as f:
+        content = f.read()
+        print(content)
+
+
+def add_habit():
     pass
+
+def remove_habit():
+    pass
+    
 
 def save_file(filename, lines_list):
     pass
