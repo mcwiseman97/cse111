@@ -21,20 +21,17 @@ def load_file(filename):
         content = f.read()
         print(content)
 
-
 def add_habit():
     pass
 
 def remove_habit():
     pass
     
-
 def save_file(filename, lines_list):
     pass
 
 def display_dashboard(metrics_dict):
     pass
-
 
 def main():
 
