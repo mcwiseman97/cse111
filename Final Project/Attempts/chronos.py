@@ -57,7 +57,7 @@ def load_data():
     if not os.path.exists(DATA_FILE): return []
     try:
         with open(DATA_FILE, "r") as f: return json.load(f)
-    except: return []
+    except: return [] # If file is corrupted, return an empty list
 
 def save_data(task_list):
     with open(DATA_FILE, "w") as f: json.dump(task_list, f, indent=4)
