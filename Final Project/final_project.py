@@ -1,0 +1,27 @@
+import os # Helps with file directory lookup and modifcations
+import time 
+import json # Ability to work with, read write json files (My storage option)
+import sys # Helps with identifying the operating system ()
+
+from datetime import datetime
+
+# Rich Packages
+from rich.layout import Layout # Organize Boxes
+from rich.color import Color # Change terminal text colors
+from rich.align import Align # Align text in a box
+from rich.table import Table # Will help make the task grid for taks | date seperation
+from rich.style import Style # Bg color, text color, text decorations
+from rich.panel import Panel # Makes the border box's
+from rich.live import Live # Allows for the terminal boxes to be dynamic
+from rich.console import Console # Allows for clearing the console
+
+
+# Main contains all the core visual elements of the program
+
+def main():
+    layout = Layout()
+    
+    pass
+
+if __name__ == "__main__":
+    main()

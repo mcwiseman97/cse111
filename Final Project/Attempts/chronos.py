@@ -96,76 +96,80 @@ def update_layout_structure(layout):
         layout["main"].split_row(Layout(name="tasks_box", ratio=2), Layout(name="timer_box", ratio=1))
 
 # --- 4. MAIN PROGRAM ---
-tasks = load_data()
-is_running = False
-remaining_seconds = 25 * 60
-last_tick_time = None
+def main():
+    tasks = load_data()
+    is_running = False
+    remaining_seconds = 25 * 60
+    last_tick_time = None
 
-layout = Layout()
-layout.split_column(Layout(name="main", ratio=1), Layout(name="footer", size=3))
+    layout = Layout()
+    layout.split_column(Layout(name="main", ratio=1), Layout(name="footer", size=3))
 
-nuclear_clear()
+    nuclear_clear()
 
-with Live(layout, refresh_per_second=10, transient=True) as live:
-    while True:
-        update_layout_structure(layout)
+    with Live(layout, refresh_per_second=10, transient=True) as live:
+        while True:
+            update_layout_structure(layout)
 
-        if is_running:
-            now = datetime.now()
-            if last_tick_time:
-                elapsed = (now - last_tick_time).total_seconds()
-                remaining_seconds = max(0, remaining_seconds - elapsed)
-            last_tick_time = now
-            if remaining_seconds <= 0:
-                is_running = False
-                notification.notify(title="Time's Up!", message="Session complete!", timeout=5)
-        else:
-            last_tick_time = None
+            if is_running:
+                now = datetime.now()
+                if last_tick_time:
+                    elapsed = (now - last_tick_time).total_seconds()
+                    remaining_seconds = max(0, remaining_seconds - elapsed)
+                last_tick_time = now
+                if remaining_seconds <= 0:
+                    is_running = False
+                    notification.notify(title="Time's Up!", message="Session complete!", timeout=5)
+            else:
+                last_tick_time = None
 
-        layout["tasks_box"].update(Panel(get_task_render(tasks), title="Task List", border_style="blue"))
-        layout["timer_box"].update(Panel(get_timer_render(remaining_seconds), title="Timer", border_style="blue"))
-        
-        f_menu = Text()
-        f_menu.append("[a]", style="bold cyan"); f_menu.append(" - add | ")
-        f_menu.append("[c]", style="bold cyan"); f_menu.append(" - complete | ")
-        f_menu.append("[p]", style="bold cyan"); f_menu.append(" - pause | ")
-        f_menu.append("[q]", style="bold cyan"); f_menu.append(" - quit")
-        layout["footer"].update(Panel(Align.center(f_menu), border_style="white"))
+            layout["tasks_box"].update(Panel(get_task_render(tasks), title="Task List", border_style="blue"))
+            layout["timer_box"].update(Panel(get_timer_render(remaining_seconds), title="Timer", border_style="blue"))
+            
+            f_menu = Text()
+            f_menu.append("[a]", style="bold cyan"); f_menu.append(" - add | ")
+            f_menu.append("[c]", style="bold cyan"); f_menu.append(" - complete | ")
+            f_menu.append("[p]", style="bold cyan"); f_menu.append(" - pause | ")
+            f_menu.append("[q]", style="bold cyan"); f_menu.append(" - quit")
+            layout["footer"].update(Panel(Align.center(f_menu), border_style="white"))
 
-        if kbhit():
-            key = getch()
-            if key == 'a':
-                live.stop()
-                name = Prompt.ask("\n[yellow]Task Name[/]")
-                due_input = Prompt.ask("[yellow]Due (MM/DD/YY)[/]", default=datetime.now().strftime("%m/%d/%y"))
-                try:
-                    date_obj = datetime.strptime(due_input, "%m/%d/%y")
-                    store_date = date_obj.strftime("%Y-%m-%d")
-                except ValueError:
-                    store_date = datetime.now().strftime("%Y-%m-%d")
-                tasks.append({"name": name, "due": store_date})
-                save_data(tasks)
-                nuclear_clear(); live.start()
-
-            elif key == 'c' and tasks:
-                live.stop()
-                console.print("\n[bold cyan]Select task to complete (0 to Go Back):[/]")
-                tasks.sort(key=lambda x: x['due'])
-                for i, t in enumerate(tasks):
-                    console.print(f" [bold]{i+1}[/] - {t['name']} ({format_date_for_display(t['due'])})")
-                choice = IntPrompt.ask("\n[green]Enter number[/]", default=0)
-                if choice != 0 and 1 <= choice <= len(tasks):
-                    tasks.pop(choice - 1)
+            if kbhit():
+                key = getch()
+                if key == 'a':
+                    live.stop()
+                    name = Prompt.ask("\n[yellow]Task Name[/]")
+                    due_input = Prompt.ask("[yellow]Due (MM/DD/YY)[/]", default=datetime.now().strftime("%m/%d/%y"))
+                    try:
+                        date_obj = datetime.strptime(due_input, "%m/%d/%y")
+                        store_date = date_obj.strftime("%Y-%m-%d")
+                    except ValueError:
+                        store_date = datetime.now().strftime("%Y-%m-%d")
+                    tasks.append({"name": name, "due": store_date})
                     save_data(tasks)
-                time.sleep(0.8)
-                nuclear_clear(); live.start()
+                    nuclear_clear(); live.start()
 
-            elif key == 'p':
-                is_running = not is_running
-            elif key == 'q':
-                break
-        time.sleep(0.05)
+                elif key == 'c' and tasks:
+                    live.stop()
+                    console.print("\n[bold cyan]Select task to complete (0 to Go Back):[/]")
+                    tasks.sort(key=lambda x: x['due'])
+                    for i, t in enumerate(tasks):
+                        console.print(f" [bold]{i+1}[/] - {t['name']} ({format_date_for_display(t['due'])})")
+                    choice = IntPrompt.ask("\n[green]Enter number[/]", default=0)
+                    if choice != 0 and 1 <= choice <= len(tasks):
+                        tasks.pop(choice - 1)
+                        save_data(tasks)
+                    time.sleep(0.8)
+                    nuclear_clear(); live.start()
 
+                elif key == 'p':
+                    is_running = not is_running
+                elif key == 'q':
+                    break
+            time.sleep(0.05)
+
+
+if __name__ == "__main__":
+    main()
 # ==============================================================================
 # DOCUMENTATION & STUDY RESOURCES
 # ==============================================================================
