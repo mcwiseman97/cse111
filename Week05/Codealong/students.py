@@ -1,8 +1,8 @@
 import csv
+
 STUDENT_FILE = "CSE111/W05/Codealong/students.csv"
 KEY_INDEX = 0
 NAME_INDEX = 1
-
 
 def read_dictionary(filename, key_column_index):
     s_disctionary = {}

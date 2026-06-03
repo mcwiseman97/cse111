@@ -131,7 +131,6 @@ def check_student(students_dict, inumber, exp_name):
                     f'Wrong name for "{inumber}"; ' \
                     f'expected {exp_name} but found {act_name}'
 
-
 # Call the main function that is part of pytest so that the
 # computer will execute the test functions in this file.
 pytest.main(["-v", "--tb=line", "-rN", __file__])
