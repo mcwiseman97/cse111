@@ -10,6 +10,7 @@ def main():
         prod_file = "./Week05/Groceries/products.csv"
         req_file = "./Week05/Groceries/request.csv"
         product_dict = read_dictionary(prod_file, 0)
+        total_quantity = 0
         
         print("\nInkom Imporium")
 
@@ -20,15 +21,19 @@ def main():
                 for row in reader:
                     product_number = row[0]
                     quantity = int(row[1])
+                    total_quantity += quantity
                     product_row = product_dict[product_number]
                     name = product_row[1]
                     price = float(product_row[2])
                     print(f"{name}: {quantity} @ ${price:.2f}")
                     total = quantity * price
                     running_total += total
+
             except:
                 print("A requested item is not a real product")
             # Use running total from for loop to finish calculating total cost.        
+            
+            print(f"Number of Items: {total_quantity}")
             print(f"Subtotal: ${running_total:.2f}")
             tax = running_total * .06
             print(f"Sales Tax: ${tax:.2f}")
