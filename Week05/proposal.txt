@@ -15,25 +15,24 @@ Personal Expense Tracker
 
 2. What real-world problem will your program address or help to solve?
 
-As a student, it is easy to lose track of where my money goes each
-month. This program will help me log daily spending by category
-(food, gas, rent, fun, etc.) and show summaries so I can see how much
-I spent in a given month and which categories use the most of my
-budget.
+It is easy to lose track of where my money goes each
+month. This program will help me log daily spending by category 
+and show summaries so I can see how much I spent in a month and 
+which categories use the most of my budget.
 
 3. What will you learn from developing this program?
 
 I will learn how to organize a program into small, reusable functions,
 how to read and write CSV files for persistent storage, how to use
 datetime to filter transactions by month, and how to write and run
-pytest test functions for calculation and file-handling logic.
+pytest test functions better.
 
 4. What Python modules will your program use?
 
     (Some examples are: csv, datetime, functools, matplotlib, math,
     pandas, pytest, random, requests, and tkinter.)
 
-csv, datetime, os, pytest (for test functions only)
+csv, datetime, os, pytest
 
 5. List the names of functions you will need?
 
@@ -52,7 +51,7 @@ parse_amount
 calculate_category_total
 calculate_monthly_total
 calculate_percent_of_total
-format_currency
+format_money
 load_transactions
 save_transactions
 get_unique_categories
