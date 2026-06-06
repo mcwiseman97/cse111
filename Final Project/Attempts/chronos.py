@@ -12,26 +12,41 @@ if sys.platform == "win32":
 
     def getch():
         return msvcrt.getch().decode("utf-8").lower()
+
+    def save_terminal_settings():
+        return None
+
+    def restore_terminal(saved_settings):
+        pass
+
+    def set_cbreak_mode():
+        pass
 else:
-    import select
+    import fcntl
+    import struct
     import termios
     import tty
 
     def kbhit():
         if not sys.stdin.isatty():
             return False
-        return select.select([sys.stdin], [], [], 0) != ([], [], [])
+        pending = fcntl.ioctl(sys.stdin.fileno(), termios.FIONREAD, struct.pack("I", 0))
+        return struct.unpack("I", pending)[0] > 0
 
-    def getch():
+    def save_terminal_settings():
         if not sys.stdin.isatty():
-            return ""
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(fd)
-            return sys.stdin.read(1).lower()
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            return None
+        return termios.tcgetattr(sys.stdin.fileno())
+
+    def restore_terminal(saved_settings):
+        if saved_settings is None:
+            return
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, saved_settings)
+
+    def set_cbreak_mode():
+        if not sys.stdin.isatty():
+            return
+        tty.setcbreak(sys.stdin.fileno())
 
 from rich.live import Live
 from rich.layout import Layout
@@ -87,85 +102,120 @@ def get_timer_render(seconds):
     mins, secs = divmod(int(seconds), 60)
     return Align.center(f"\n[bold white]{mins:02d}:{secs:02d}[/]\n", vertical="middle")
 
-def update_layout_structure(layout):
+def build_dashboard(tasks, remaining_seconds):
+    layout = Layout()
+    layout.split_column(Layout(name="main", ratio=1), Layout(name="footer", size=3))
     width = console.width
-    layout["main"].split()
     if width < 60:
         layout["main"].split_column(Layout(name="timer_box", size=5), Layout(name="tasks_box", ratio=1))
     else:
         layout["main"].split_row(Layout(name="tasks_box", ratio=2), Layout(name="timer_box", ratio=1))
 
-# --- 4. MAIN PROGRAM ---
-def main():
-    tasks = load_data()
-    is_running = False
-    remaining_seconds = 25 * 60
-    last_tick_time = None
+    layout["tasks_box"].update(Panel(get_task_render(tasks), title="Task List", border_style="blue"))
+    layout["timer_box"].update(Panel(get_timer_render(remaining_seconds), title="Timer", border_style="blue"))
 
-    layout = Layout()
-    layout.split_column(Layout(name="main", ratio=1), Layout(name="footer", size=3))
+    f_menu = Text()
+    f_menu.append("[a]", style="bold cyan"); f_menu.append(" - add | ")
+    f_menu.append("[c]", style="bold cyan"); f_menu.append(" - complete | ")
+    f_menu.append("[p]", style="bold cyan"); f_menu.append(" - pause | ")
+    f_menu.append("[q]", style="bold cyan"); f_menu.append(" - quit")
+    layout["footer"].update(Panel(Align.center(f_menu), border_style="white"))
+    return layout
 
+def draw_dashboard(tasks, remaining_seconds):
     nuclear_clear()
+    console.print(build_dashboard(tasks, remaining_seconds))
 
-    with Live(layout, refresh_per_second=10, transient=True) as live:
-        while True:
-            update_layout_structure(layout)
+def read_key():
+    if sys.platform == "win32":
+        while not kbhit():
+            time.sleep(0.05)
+        return getch()
+    return sys.stdin.read(1).lower()
 
-            if is_running:
-                now = datetime.now()
-                if last_tick_time:
-                    elapsed = (now - last_tick_time).total_seconds()
-                    remaining_seconds = max(0, remaining_seconds - elapsed)
-                last_tick_time = now
-                if remaining_seconds <= 0:
-                    is_running = False
-                    notification.notify(title="Time's Up!", message="Session complete!", timeout=5)
-            else:
-                last_tick_time = None
+def add_task(tasks, terminal_settings):
+    restore_terminal(terminal_settings)
+    name = Prompt.ask("\n[yellow]Task Name[/]")
+    due_input = Prompt.ask("[yellow]Due (MM/DD/YY)[/]", default=datetime.now().strftime("%m/%d/%y"))
+    try:
+        date_obj = datetime.strptime(due_input, "%m/%d/%y")
+        store_date = date_obj.strftime("%Y-%m-%d")
+    except ValueError:
+        store_date = datetime.now().strftime("%Y-%m-%d")
+    tasks.append({"name": name, "due": store_date})
+    save_data(tasks)
+    set_cbreak_mode()
 
-            layout["tasks_box"].update(Panel(get_task_render(tasks), title="Task List", border_style="blue"))
+def complete_task(tasks, terminal_settings):
+    restore_terminal(terminal_settings)
+    console.print("\n[bold cyan]Select task to complete (0 to Go Back):[/]")
+    tasks.sort(key=lambda x: x['due'])
+    for i, t in enumerate(tasks):
+        console.print(f" [bold]{i+1}[/] - {t['name']} ({format_date_for_display(t['due'])})")
+    choice = IntPrompt.ask("\n[green]Enter number[/]", default=0)
+    if choice != 0 and 1 <= choice <= len(tasks):
+        tasks.pop(choice - 1)
+        save_data(tasks)
+    time.sleep(0.5)
+    set_cbreak_mode()
+
+def run_timer(tasks, remaining_seconds):
+    is_running = True
+    last_tick_time = None
+    layout = build_dashboard(tasks, remaining_seconds)
+
+    with Live(layout, refresh_per_second=4, transient=True) as live:
+        while is_running:
+            now = datetime.now()
+            if last_tick_time:
+                elapsed = (now - last_tick_time).total_seconds()
+                remaining_seconds = max(0, remaining_seconds - elapsed)
+            last_tick_time = now
+
+            if remaining_seconds <= 0:
+                is_running = False
+                notification.notify(title="Time's Up!", message="Session complete!", timeout=5)
+                break
+
             layout["timer_box"].update(Panel(get_timer_render(remaining_seconds), title="Timer", border_style="blue"))
-            
-            f_menu = Text()
-            f_menu.append("[a]", style="bold cyan"); f_menu.append(" - add | ")
-            f_menu.append("[c]", style="bold cyan"); f_menu.append(" - complete | ")
-            f_menu.append("[p]", style="bold cyan"); f_menu.append(" - pause | ")
-            f_menu.append("[q]", style="bold cyan"); f_menu.append(" - quit")
-            layout["footer"].update(Panel(Align.center(f_menu), border_style="white"))
 
             if kbhit():
-                key = getch()
-                if key == 'a':
-                    live.stop()
-                    name = Prompt.ask("\n[yellow]Task Name[/]")
-                    due_input = Prompt.ask("[yellow]Due (MM/DD/YY)[/]", default=datetime.now().strftime("%m/%d/%y"))
-                    try:
-                        date_obj = datetime.strptime(due_input, "%m/%d/%y")
-                        store_date = date_obj.strftime("%Y-%m-%d")
-                    except ValueError:
-                        store_date = datetime.now().strftime("%Y-%m-%d")
-                    tasks.append({"name": name, "due": store_date})
-                    save_data(tasks)
-                    nuclear_clear(); live.start()
-
-                elif key == 'c' and tasks:
-                    live.stop()
-                    console.print("\n[bold cyan]Select task to complete (0 to Go Back):[/]")
-                    tasks.sort(key=lambda x: x['due'])
-                    for i, t in enumerate(tasks):
-                        console.print(f" [bold]{i+1}[/] - {t['name']} ({format_date_for_display(t['due'])})")
-                    choice = IntPrompt.ask("\n[green]Enter number[/]", default=0)
-                    if choice != 0 and 1 <= choice <= len(tasks):
-                        tasks.pop(choice - 1)
-                        save_data(tasks)
-                    time.sleep(0.8)
-                    nuclear_clear(); live.start()
-
-                elif key == 'p':
-                    is_running = not is_running
+                key = read_key()
+                if key == 'p':
+                    is_running = False
                 elif key == 'q':
-                    break
+                    sys.exit(0)
             time.sleep(0.05)
+
+    return remaining_seconds
+
+# --- 4. MAIN PROGRAM ---
+def main():
+    if not sys.stdin.isatty():
+        console.print("[red]Run this program in a terminal (not the Run button).[/]")
+        sys.exit(1)
+
+    tasks = load_data()
+    remaining_seconds = 25 * 60
+    terminal_settings = save_terminal_settings()
+    set_cbreak_mode()
+
+    try:
+        while True:
+            draw_dashboard(tasks, remaining_seconds)
+            key = read_key()
+
+            if key == 'a':
+                add_task(tasks, terminal_settings)
+            elif key == 'c' and tasks:
+                complete_task(tasks, terminal_settings)
+            elif key == 'p':
+                remaining_seconds = run_timer(tasks, remaining_seconds)
+            elif key == 'q':
+                break
+    finally:
+        restore_terminal(terminal_settings)
+        nuclear_clear()
 
 
 if __name__ == "__main__":
