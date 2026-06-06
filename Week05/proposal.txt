@@ -11,14 +11,29 @@ CSE 111 Proposal for a Student Chosen Program
 
 1. What is the title of your program?
 
+Personal Expense Tracker
+
 2. What real-world problem will your program address or help to solve?
 
+As a student, it is easy to lose track of where my money goes each
+month. This program will help me log daily spending by category
+(food, gas, rent, fun, etc.) and show summaries so I can see how much
+I spent in a given month and which categories use the most of my
+budget.
+
 3. What will you learn from developing this program?
+
+I will learn how to organize a program into small, reusable functions,
+how to read and write CSV files for persistent storage, how to use
+datetime to filter transactions by month, and how to write and run
+pytest test functions for calculation and file-handling logic.
 
 4. What Python modules will your program use?
 
     (Some examples are: csv, datetime, functools, matplotlib, math,
     pandas, pytest, random, requests, and tkinter.)
+
+csv, datetime, os, pytest (for test functions only)
 
 5. List the names of functions you will need?
 
@@ -33,5 +48,21 @@ CSE 111 Proposal for a Student Chosen Program
     a result. Therefore, you should write most of your program functions
     to have parameters and return a result.)
 
+parse_amount
+calculate_category_total
+calculate_monthly_total
+calculate_percent_of_total
+format_currency
+load_transactions
+save_transactions
+get_unique_categories
+display_summary
+add_transaction_interactive
+main
+
 6. List the names of the test functions you will write.
 
+test_calculate_category_total
+test_calculate_monthly_total
+test_parse_amount
+test_save_and_load_transactions
