@@ -26,12 +26,6 @@ def format_date(date_obj):
 
 
 def parse_date(text):
-    """Parse an M-D-YY date string and return it in normalized form.
-
-    Parameters
-        text: a date string such as 5-19-26 or 06-01-26
-    Return: a normalized date string such as 5-19-26
-    """
     date_obj = datetime.strptime(text.strip(), DATE_FORMAT)
     return format_date(date_obj)
 
